@@ -3,24 +3,23 @@ package com.jonathan.jonathanau_comp304lab3_ex1
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.unit.Constraints
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
-import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
+import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
@@ -42,7 +41,7 @@ import kotlinx.coroutines.launch
 
 var globalIndex = 0
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startWeatherSync()
@@ -69,7 +68,6 @@ class MainActivity : ComponentActivity() {
                 started = SharingStarted.Eagerly,
                 initialValue = DeviceFoldPosture.NormalPosture
             )
-        enableEdgeToEdge()
         setContent {
             val devicePosture = deviceFoldingPostureFlow.collectAsStateWithLifecycle().value
             val windowSizeClass = calculateWindowSizeClass(activity = this)
@@ -188,85 +186,21 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-/*
-@Composable
-fun MainScaffold(
-    //windowSizeClass : WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-){
-    //val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-    //val showTopAppBar = windowSizeClass.windowHeightSizeClass != WindowHeightSizeClass.COMPACT
-    Scaffold{innerPadding ->
-        val navController = rememberNavController()
-        NavHost(
-            navController = navController,
-            startDestination = WeatherRoutes.Home.route,
-            modifier = Modifier.padding(innerPadding)
-        ){
-            //this Route leeds to the Home Screen
-            composable(WeatherRoutes.Home.route){
-                HomeView(
-                    //This is where the routes are set
-                    onHourlyWeatherButtonClick = { navController.navigate(WeatherRoutes.HourlyForecast.route) },
-                    onDailyWeatherButtonClick = { navController.navigate(WeatherRoutes.DailyForecast.route) },
-                    onWeeklyWeatherButtonClick = { navController.navigate(WeatherRoutes.WeeklyForecast.route) },
-                )
-            }
-            //This Route leads to the CreateTask Screen
-            composable(WeatherRoutes.HourlyForecast.route) {
-                HourlyViewScreen(
-                    onHomeButtonClick = { navController.navigate(WeatherRoutes.Home.route) },
-                    onDailyWeatherButtonClick = { navController.navigate(WeatherRoutes.DailyForecast.route) },
-                    onWeeklyWeatherButtonClick = { navController.navigate(WeatherRoutes.WeeklyForecast.route) },
-                    listIndex = globalIndex,
-                )
-            }
-            //This Route leeds to the ViewEdit Screen
-            composable(WeatherRoutes.DailyForecast.route){
-                DailyViewScreen(
-                    onHomeButtonClick = { navController.navigate(WeatherRoutes.Home.route) },
-                    onHourlyWeatherButtonClick = { navController.navigate(WeatherRoutes.HourlyForecast.route) },
-                    onWeeklyWeatherButtonClick = { navController.navigate(WeatherRoutes.WeeklyForecast.route) },
-                    //This sets the listIndex to the global index
-                    // more about this in ViewEditTasks.kt
-                    listIndex = globalIndex,
-                )
-            }
-            //This Route leads to the CreateTask Screen
-            composable(WeatherRoutes.WeeklyForecast.route) {
-                WeeklyViewScreen(
-                    onHomeButtonClick = { navController.navigate(WeatherRoutes.Home.route) },
-                    onHourlyWeatherButtonClick = { navController.navigate(WeatherRoutes.HourlyForecast.route) },
-                    onDailyWeatherButtonClick = { navController.navigate(WeatherRoutes.DailyForecast.route) },
-                    listIndex = globalIndex,
-                )
-            }
-        }
-    }
-}*/
 
-private fun startWeatherSync() {
-    val syncWeatherWorkRequest = OneTimeWorkRequestBuilder<WeatherSyncWorker>()
-        .setConstraints(
-            Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .setRequiredBatteryNotLow(true)
-                .build()
+    private fun startWeatherSync() {
+        val syncWeatherWorkRequest = OneTimeWorkRequestBuilder<WeatherSyncWorker>()
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .setRequiresBatteryNotLow(true)
+                    .build()
+            )
+            .build()
+
+        WorkManager.getInstance(applicationContext).enqueueUniqueWork(
+            "syncWeather",
+            ExistingWorkPolicy.KEEP,
+            syncWeatherWorkRequest
         )
-        .build()
-
-    WorkManager.getInstance(applicationContext).enqueueUniqueWork(
-        "syncWeather",
-        ExistingWorkPolicy.KEEP,
-        syncWeatherWorkRequest
-    )
-}
-
-/*
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    JonathanAu_COMP304Lab3_Ex1Theme {
-        MainScaffold()
     }
-}*/
+}

@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "JonathanAu_COMP304Lab3_Ex1"
 include(":app")
+ 

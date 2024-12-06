@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.JonathanAu_COMP304Lab3_Ex1" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.MyMaps" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

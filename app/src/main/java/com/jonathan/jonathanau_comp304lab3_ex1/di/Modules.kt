@@ -26,7 +26,11 @@ private val json = Json {
     encodeDefaults = false
 }
 
+//API call
 //https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+
+//API call: Coordinates by location name
+//http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
 
 val appModules = module {
     single<WeatherRepository> { WeatherRepoImpl(get(), get(), get())}
