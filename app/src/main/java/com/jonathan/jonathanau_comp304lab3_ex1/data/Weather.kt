@@ -4,7 +4,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Weather (
+//@Entity(tableName = "weather", primaryKeys = ["longitude", "latitude"])
+data class Weather(
     @SerialName("Location")
     val location: String = "",
     @SerialName("Temperature")

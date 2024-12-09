@@ -1,7 +1,7 @@
 package com.jonathan.jonathanau_comp304lab3_ex1.ui.theme
 
-import android.app.Activity
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -33,6 +33,7 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun JonathanAu_COMP304Lab3_Ex1Theme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -41,7 +42,7 @@ fun JonathanAu_COMP304Lab3_Ex1Theme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        dynamicColor -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }

@@ -12,7 +12,6 @@ import com.jonathan.jonathanau_comp304lab3_ex1.navigation.lon
 import com.jonathan.jonathanau_comp304lab3_ex1.viewmodel.WeatherViewModel
 import com.jonathan.jonathanau_comp304lab3_ex1.workers.WeatherSyncWorker
 import kotlinx.coroutines.Dispatchers
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import org.koin.android.ext.koin.androidContext

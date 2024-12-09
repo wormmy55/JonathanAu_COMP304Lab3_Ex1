@@ -9,17 +9,17 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeatherDAO {
-    @Query("SELECT * FROM Weather")
-    fun getWeather(): Flow<List<Weather>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(weatherEntity: WeatherEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(weather: List<Weather>)
+    /*@Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(weather: List<Weather>)*/
+
+    @Query("SELECT * FROM Weather")
+    fun getWeather(): Flow<List<WeatherEntity>>
 
     @Update
-    suspend fun update(weather: WeatherEntity)
+    suspend fun update(weatherEntity: WeatherEntity)
 
     @Query("SELECT * FROM Weather WHERE isFavorite = 1")
     fun getFavoriteWeather(): Flow<List<WeatherEntity>>

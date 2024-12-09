@@ -1,25 +1,27 @@
-import java.util.regex.Pattern.compile
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlinx-serialization")
     id("com.google.devtools.ksp")
+    //id("androidx.room")
 }
 
 android {
     namespace = "com.jonathan.jonathanau_comp304lab3_ex1"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.jonathan.jonathanau_comp304lab3_ex1"
-        minSdk = 34
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
 
@@ -67,11 +69,14 @@ dependencies {
     implementation(libs.androidx.window)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    implementation(libs.androidx.runner)
-    implementation(libs.test.espresso)
     ksp(libs.room.compiler)
     implementation(libs.work.runtime)
     implementation(libs.workmanager.koin)
+
+    //implementation("androidx.core:core-ktx:1.9.0")
+    implementation(libs.androidx.runner)
+    //implementation(libs.test.espresso)
+
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.test.junitExt)
     androidTestImplementation(libs.test.espresso)

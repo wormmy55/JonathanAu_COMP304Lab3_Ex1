@@ -30,7 +30,7 @@ class WeatherRepoImpl (
 
         override suspend fun fetchRemoteWeather() {
             withContext(dispatcher){
-                val response = weatherAPI.getWeather()
+                val response = weatherAPI.getWeather("London,UK"/*, "YOUR_API_KEY"*/)
                 if(response.isSuccessful){
                     response.body()!!.map {
                         weatherDAO.insert(WeatherEntity(
